@@ -1,0 +1,2 @@
+var c=(t,e)=>{Array.isArray(e)?e.forEach(r=>c(t,r)):t.appendChild(e.nodeType?e:document.createTextNode(e))},f=(t,e,...r)=>{let a=Object.freeze({id:Symbol(),tag:t,props:e,children:r});if(console.log(a),typeof t=="function")return t(e,r);let n=document.createElement(t);return Object.entries(e||{}).forEach(([o,s])=>{o.startsWith("on")&&o.toLowerCase()in window?n.addEventListener(o.toLowerCase().substr(2),s):n.setAttribute(o,s.toString())}),r.forEach(o=>{c(n,o)}),n};export{f as createElement};
+//# sourceMappingURL=index.js.map
