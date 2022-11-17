@@ -1,4 +1,4 @@
-import * as $ from 'pubsubcomponents'
+import * as $ from 'subscribers'
 import './style.css'
 import { App } from './App'
 

@@ -1,4 +1,4 @@
-import * as $ from 'pubsubcomponents'
+import * as $ from 'subscribers'
 
 const centered = (width) => ({
     display: 'grid',
