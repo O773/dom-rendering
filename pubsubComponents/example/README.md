@@ -1,6 +1,11 @@
 # pubsubComponents example page
 
-install dependencies with
+first, build the library in the root folder
+```
+$ npm run build
+``` 
+
+then, in this folder, install dependencies with
 ```
 $ npm install
 ```
