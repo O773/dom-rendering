@@ -13,6 +13,9 @@ pages:
     - cd example
     - npm ci
     - npm run build
+    - cd ../..
+    - mkdir public
+    - cp -r subscribers/example/lib/* public
   artifacts:
     paths:
       - public
