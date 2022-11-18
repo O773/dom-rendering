@@ -1,4 +1,4 @@
-import {subscribe} from '../state'
+import { subscribe } from '../state'
 
 describe('subscribe', () => {
   // it('subscribes to a property', () => {

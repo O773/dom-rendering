@@ -55,9 +55,9 @@ const createElement = (tag: any, props: { [key: string]: any }, ...children) => 
 	Object
 		.values(props || {})
 		.filter(isStateValue)
-		.forEach(stateJSONPath => {
+		.forEach(stateJSONPath =>
 			state.subscribe(stateJSONPath, () =>
-				element.replaceWith(createElement(tag, props, children)))})
+				element.replaceWith(createElement(tag, props, children))))
 
 	children.forEach((child, position) => {
 		appendChild(element, child, position)
