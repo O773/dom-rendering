@@ -2,10 +2,10 @@
 image: node:lts
 # Functions that should be executed before the build script is run
 stages:
-  - build
+  - buildPages
 
-build:
-  stage: build
+pages:
+  stage: buildPages
   script:
     - cd subscribers
     - npm ci
@@ -13,3 +13,6 @@ build:
     - cd example
     - npm ci
     - npm run build
+  artifacts:
+    paths:
+      - public
