@@ -24,6 +24,12 @@ const set = (jsonPath: string, newValue: any) => {
     return
   }
   jsonPath = removeInitialDollar(jsonPath);
+
+  if (newValue instanceof Promise) {
+    newValue.then(result => set(jsonPath, result), console.error)
+    return
+  }
+
   objectpath.set(state, jsonPath, newValue);
   const callbacks = [...observers.get(jsonPath)?.values() || []]
   observers.set(jsonPath, new Set())

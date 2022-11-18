@@ -5,12 +5,14 @@ const isStateValue = (value: any): value is string => typeof value === 'string' 
 
 const resolve = (value: any) => isStateValue(value) ? state.get(value) : value
 
-const appendChild = (parent, child) => {
+const resolveProps = (props) => props && Object.entries(props).reduce((a, [key, value]) => ({ ...a, [key]: resolve(value)}), {})
+
+const appendChild = (parent, child, index) => {
 	if (Array.isArray(child)) {
-		child.forEach((nestedChild) => appendChild(parent, nestedChild))
+		child.forEach((nestedChild, nestedIndex) => appendChild(parent, nestedChild, nestedIndex))
 	} else {
-		parent.appendChild(
-			child.nodeType ? child : createTextNode(child)
+		parent.insertBefore(
+			child.nodeType ? child : createTextNode(child), parent.children[index]
 		)
 	}
 }
@@ -25,42 +27,40 @@ const createTextNode = (value: string | number) => {
 }
 
 const createElement = (tag: any, props: { [key: string]: any }, ...children) => {
-	// If it's a component, run it
   	if (typeof tag === "function") {
-		// map state props to their actual value
-		const resolvedProps = Object.entries(props).reduce((a, [key, value]) => ({ ...a, [key]: resolve(value)}), {})
-    	const element = tag(resolvedProps, children)
-		// if it names the state in its props, it rerenders when they change
-		const subscriptions = Object.values(props || {}).filter(isStateValue)
-		subscriptions.forEach(stateJSONPath => {
-			state.subscribe(stateJSONPath, () => {
-				element.replaceWith(createElement(tag, props, children))
-			})
-		})
+    	const element = tag(resolveProps(props), children)
+		Object
+			.values(props || {})
+			.filter(isStateValue)
+			.forEach(stateJSONPath => state.subscribe(stateJSONPath, () =>
+				element.replaceWith(createElement(tag, props, children))))
+
 		return element
   	}
 
 	const element = document.createElement(tag)
 
-	Object.entries(props || {})
+	Object
+		.entries(props || {})
 		.forEach(([name, value]) => {
-		if (name.startsWith('on') && name.toLowerCase() in window) {
-			element.addEventListener(name.toLowerCase().slice(2), value)
-    	} else if (name === 'style') {
-			element.setAttribute(name, objToCss(value))
-		} else {
-      		element.setAttribute(name, value.toString())
-    	}
-	})
+			if (name.startsWith('on') && name.toLowerCase() in window) {
+				element.addEventListener(name.toLowerCase().slice(2), value)
+			} else if (name === 'style') {
+				element.setAttribute(name, objToCss(value))
+			} else {
+				element.setAttribute(name, value.toString())
+			}
+		})
 
-	children.forEach((child) => {
-		appendChild(element, child)
-	})
-
-	const subscriptions = Object.values(props || {}).filter(isStateValue)
-	subscriptions
+	Object
+		.values(props || {})
+		.filter(isStateValue)
 		.forEach(stateJSONPath => {
-		state.subscribe(stateJSONPath, () => element.replaceWith(createElement(tag, props, children)))
+			state.subscribe(stateJSONPath, () =>
+				element.replaceWith(createElement(tag, props, children)))})
+
+	children.forEach((child, position) => {
+		appendChild(element, child, position)
 	})
 
 	return element

@@ -5,7 +5,7 @@ esbuild
         entryPoints: ['src/index.ts'],
         outdir: 'lib',
         bundle: true,
-        sourcemap: false,
+        sourcemap: true,
         minify: true,
         format: 'esm',
         target: ['esnext']

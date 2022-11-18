@@ -4,7 +4,7 @@ import { App } from './App'
 
 const initState = {
     mama: 'dude',
-    fruits: ['🍌', '🍎', '🍉', '🍇', '🍋', '🍓']
+    fruits: ['🍌', '🍎', '🍉', '🍇']
 }
 
 $.init(initState)
