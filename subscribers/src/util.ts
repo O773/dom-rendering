@@ -9,6 +9,6 @@ export const isNullish = (arg: any | null | undefined) => arg === null || arg ==
 export const thunk = (arg: any, val?: any) => typeof arg === 'function' ? arg(val) : arg
 
 export const when = (val: any) => ({
-    then(x: any) { return when(thunk(x, val))},
+    then(fn) { return fn(thunk(val))},
     orElse(x: any) { return when(thunk(x, val))}
 })
